@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  redis:
+    image: redis
+    volumes:
+      - ./data:/data
+    ports:
+      - 6379:6379
+
+  reviewme:
+    build: .
+    env_file:
+      - services.env
+    environment:
+      REDIS_URL: "redis://redis:6379"
+    links:
+      - redis

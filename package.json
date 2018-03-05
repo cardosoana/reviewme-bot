@@ -1,0 +1,36 @@
+{
+  "name": "reviewme",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A good friend",
+  "dependencies": {
+    "axios": "^0.15.2",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "hubot": "^2.19.0",
+    "hubot-d20": "^1.0.0",
+    "hubot-diagnostics": "0.0.1",
+    "hubot-help": "^0.2.0",
+    "hubot-maps": "0.0.2",
+    "hubot-redis-brain": "0.0.3",
+    "hubot-rules": "^0.1.1",
+    "hubot-scripts": "^2.17.2",
+    "hubot-slack": "^4.1.0",
+    "lodash": "^4.16.4",
+    "request-promise": "^4.2.2"
+  },
+  "engines": {
+    "node": "6.6.x"
+  },
+  "devDependencies": {
+    "eslint": "^3.8.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1",
+    "nodemon": "^1.11.0"
+  },
+  "scripts": {
+    "lint": "eslint scripts/*.js ",
+    "watch-lint": "nodemon -e js --exec 'npm run lint --silent' --watch scripts "
+  }
+}
