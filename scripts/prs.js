@@ -4,25 +4,20 @@
 // Commands:
 //   hubot open prs
 //
-// Author:
-//   Ana Cardoso
-//
 const request = require('request-promise');
 
 const GITHUB_API = 'https://api.github.com';
 const ORGANIZATION = process.env.GITHUB_ORGANIZATION;
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
-const formatResponse = (repo_pulls) => {
-	const repo = repo_pulls[0].head.repo;
-	let response = `- Repository: ${repo.name} (${repo.html_url})\n`;
+const formatResponse = repo_prs => {
+	const repo = repo_prs[0].head.repo;
+	let response = `\n*- Repository: ${repo.name}*\n`;
 
-	repo_pulls.forEach(pull => {
-		let pullResponse = `PR #${pull.number}: ${pull.title} (${pull.html_url})\n`;
-		response = response.concat(pullResponse);
-	});
+	let formattedPrs = repo_prs
+		.map(pull => `PR #*${pull.number}*: ${pull.title} (${pull.html_url})`);
 
-	return response;
+	return response += formattedPrs.join('\n');
 };
 
 const replyError = (res, error) => {
@@ -38,7 +33,7 @@ const getRepos = () => {
 	});
 };
 
-const getPulls = (repo_name) => {
+const getPrs = repo_name => {
 	return request({
 		url: `${GITHUB_API}/repos/${ORGANIZATION}/${repo_name}/` +
          `pulls?access_token=${GITHUB_TOKEN}`,
@@ -46,24 +41,24 @@ const getPulls = (repo_name) => {
 	});
 };
 
-const replyOpenPullsByRepo = (res, repos) => {
-	let reposPullsPromise = repos.map(repo => getPulls(repo.name));
+const replyOpenPrsByRepo = (res, repos) => {
+	let reposPrsPromise = repos.map(repo => getPrs(repo.name));
 
-	Promise.all(reposPullsPromise).then(repoPulls => {
-		let reposWithOpenPulls = repoPulls.filter(pulls => pulls != '[]');
-		let formattedPulls = reposWithOpenPulls.map(pulls => {
-			return formatResponse(JSON.parse(pulls));
+	Promise.all(reposPrsPromise).then(repoPrs => {
+		let reposWithOpenPrs = repoPrs.filter(prs => prs != '[]');
+		let formattedPrs = reposWithOpenPrs.map(prs => {
+			return formatResponse(JSON.parse(prs));
 		});
-		res.reply(formattedPulls.join('\n'));
+		res.reply(formattedPrs.join('\n'));
 	}).catch(error => replyError(res, error));
 };
 
-module.exports = (robot) => {
+module.exports = robot => {
 	robot.respond(/.open prs/i, (res) => {
 		let getReposPromise = getRepos();
 		getReposPromise.then(reposResponse => {
 			let repos = JSON.parse(reposResponse);
-			replyOpenPullsByRepo(res, repos);
+			replyOpenPrsByRepo(res, repos);
 		}).catch(error => replyError(res, error));
 	});
 };
