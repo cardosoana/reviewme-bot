@@ -5,14 +5,14 @@
   "description": "A bot to get all open pull request of your GitHub organization",
   "dependencies": {
     "coffee-script": "^1.12.7",
-    "hubot": "^2.19.0",
+    "hubot": "^3.2.0",
     "hubot-d20": "^1.0.0",
     "hubot-diagnostics": "0.0.1",
     "hubot-help": "^0.2.0",
     "hubot-redis-brain": "0.0.3",
     "hubot-rules": "^0.1.1",
     "hubot-scripts": "^2.17.2",
-    "hubot-slack": "^4.1.0",
+    "hubot-slack": "^4.6.0",
     "request-promise": "^4.2.2"
   },
   "engines": {
